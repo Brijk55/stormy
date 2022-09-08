@@ -5,7 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -18,7 +20,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.internal.tls.OkHostnameVerifier;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,14 +31,20 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    TextView darkSky = findViewById(R.id.darkSkyAttribution);
+    darkSky.setMovementMethod(LinkMovementMethod.getInstance());
+
     String apiKey = "57eaf3aa961968bf65b0619680588073";
     double latitude = 37.8267;
-    double longitude = -122.4233;
+    double longitude = -122.423;
 
-    String forecastURL = "https://api.darksky.net/forecast/" + apiKey +
-        "/" + latitude + "," + longitude;
+    String forecastURL = "https://api.forecast.io/forecast/"
+        + apiKey + "/"
+        + latitude + ","
+        + longitude;
 
     if (isNetworkAvailable()) {
+
       OkHttpClient client = new OkHttpClient();
 
       Request request = new Request.Builder()
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
           try {
             String jsonData = response.body().string();
             Log.v(TAG, jsonData);
+
             if (response.isSuccessful()) {
               currentWeather = getCurrentDetails(jsonData);
 
@@ -67,15 +75,11 @@ public class MainActivity extends AppCompatActivity {
           } catch (JSONException e) {
             Log.e(TAG, "JSON Exception caught: ", e);
           }
-
         }
       });
     }
-    else {
-      Toast.makeText(this, R.string.network_unavailable_message,
-          Toast.LENGTH_LONG).show();
-    }
-    Log.d(TAG, "Main UI code is running, hooray!");
+
+    Log.d(TAG, "Main UI code is running. hooray!");
   }
 
   private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     Log.d(TAG, currentWeather.getFormattedTime());
 
     return currentWeather;
+
   }
 
   private boolean isNetworkAvailable() {
@@ -112,7 +117,9 @@ public class MainActivity extends AppCompatActivity {
     if (networkInfo != null && networkInfo.isConnected()) {
       isAvailable = true;
     }
-
+    else {
+      Toast.makeText(this, R.string.network_unavailable_message, Toast.LENGTH_LONG).show();
+    }
     return isAvailable;
   }
 

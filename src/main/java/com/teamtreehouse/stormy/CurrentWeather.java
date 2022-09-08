@@ -15,14 +15,6 @@ public class CurrentWeather {
   private String summary;
   private String timeZone;
 
-  public String getTimeZone() {
-    return timeZone;
-  }
-
-  public void setTimeZone(String timeZone) {
-    this.timeZone = timeZone;
-  }
-
   public String getLocationLabel() {
     return locationLabel;
   }
@@ -35,14 +27,10 @@ public class CurrentWeather {
     return icon;
   }
 
-  public void setIcon(String icon) {
-    this.icon = icon;
-  }
-
   public int getIconId() {
     int iconId = R.drawable.clear_day;
 
-    switch(icon) {
+    switch (icon) {
       case "clear-day":
         iconId = R.drawable.clear_day;
         break;
@@ -76,6 +64,11 @@ public class CurrentWeather {
     }
 
     return iconId;
+
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
   }
 
   public long getTime() {
@@ -87,6 +80,7 @@ public class CurrentWeather {
     formatter.setTimeZone(TimeZone.getTimeZone(timeZone));
 
     Date dateTime = new Date(time * 1000);
+
     return formatter.format(dateTime);
   }
 
@@ -124,5 +118,13 @@ public class CurrentWeather {
 
   public void setSummary(String summary) {
     this.summary = summary;
+  }
+
+  public String getTimeZone() {
+    return timeZone;
+  }
+
+  public void setTimeZone(String timeZone) {
+    this.timeZone = timeZone;
   }
 }
